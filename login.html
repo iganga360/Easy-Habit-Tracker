@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Easy Habit Tracker</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#x1F4CA;</text></svg>">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/auth.css">
+    <link rel="stylesheet" href="css/animations.css">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-box animate-scale-in">
+            <div class="auth-header">
+                <div class="auth-logo">📊</div>
+                <h1 class="auth-title">Easy Habit Tracker</h1>
+                <p class="auth-subtitle">Build better habits, one day at a time</p>
+            </div>
+
+            <!-- Success/Error Messages -->
+            <div id="authMessage"></div>
+
+            <!-- Auth Tabs -->
+            <div class="auth-tabs">
+                <button class="auth-tab active" id="loginTab">Login</button>
+                <button class="auth-tab" id="signupTab">Sign Up</button>
+            </div>
+
+            <!-- Login Form -->
+            <form class="auth-form" id="loginForm" aria-label="Login form">
+                <div class="form-group">
+                    <label class="form-label" for="loginEmail">Email</label>
+                    <input 
+                        type="email" 
+                        class="form-input" 
+                        id="loginEmail" 
+                        placeholder="Enter your email"
+                        aria-describedby="loginEmailError"
+                        aria-required="true"
+                        required
+                    >
+                    <div class="form-error" id="loginEmailError" role="alert">Please enter a valid email</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="loginPassword">Password</label>
+                    <div class="password-wrapper">
+                        <input 
+                            type="password" 
+                            class="form-input" 
+                            id="loginPassword" 
+                            placeholder="Enter your password"
+                            aria-describedby="loginPasswordError"
+                            aria-required="true"
+                            required
+                        >
+                        <button type="button" class="password-toggle" id="toggleLoginPassword" aria-label="Toggle password visibility">
+                            👁️
+                        </button>
+                    </div>
+                    <div class="form-error" id="loginPasswordError" role="alert">Password is required</div>
+                </div>
+
+                <div class="form-checkbox-group">
+                    <input type="checkbox" class="form-checkbox" id="rememberMe" aria-label="Remember me">
+                    <label class="form-checkbox-label" for="rememberMe">Remember me</label>
+                </div>
+
+                <div class="forgot-password">
+                    <a href="#" class="forgot-password-link" id="forgotPasswordLink">Forgot password?</a>
+                </div>
+
+                <button type="submit" class="auth-submit btn-ripple" aria-label="Login to your account">
+                    Login
+                </button>
+
+                <div class="auth-divider">
+                    <span class="auth-divider-text">or</span>
+                </div>
+
+                <button type="button" class="btn btn-secondary btn-ripple" id="demoLogin" style="width: 100%;">
+                    Try Demo Mode
+                </button>
+            </form>
+
+            <!-- Signup Form -->
+            <form class="auth-form" id="signupForm" style="display: none;" aria-label="Sign up form">
+                <div class="form-group">
+                    <label class="form-label" for="signupUsername">Username</label>
+                    <input 
+                        type="text" 
+                        class="form-input" 
+                        id="signupUsername" 
+                        placeholder="Choose a username"
+                        aria-label="Username (optional)"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="signupEmail">Email</label>
+                    <input 
+                        type="email" 
+                        class="form-input" 
+                        id="signupEmail" 
+                        placeholder="Enter your email"
+                        aria-describedby="signupEmailError"
+                        aria-required="true"
+                        required
+                    >
+                    <div class="form-error" id="signupEmailError" role="alert">Please enter a valid email</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="signupPassword">Password</label>
+                    <div class="password-wrapper">
+                        <input 
+                            type="password" 
+                            class="form-input" 
+                            id="signupPassword" 
+                            placeholder="Create a password (min. 6 characters)"
+                            aria-describedby="signupPasswordError passwordStrengthText"
+                            aria-required="true"
+                            required
+                        >
+                        <button type="button" class="password-toggle" id="toggleSignupPassword" aria-label="Toggle password visibility">
+                            👁️
+                        </button>
+                    </div>
+                    <div class="password-strength" role="progressbar" aria-label="Password strength">
+                        <div class="password-strength-bar" id="passwordStrengthBar"></div>
+                    </div>
+                    <div class="password-strength-text" id="passwordStrengthText" aria-live="polite"></div>
+                    <div class="form-error" id="signupPasswordError" role="alert">Password must be at least 6 characters</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="signupPasswordConfirm">Confirm Password</label>
+                    <input 
+                        type="password" 
+                        class="form-input" 
+                        id="signupPasswordConfirm" 
+                        placeholder="Confirm your password"
+                        aria-describedby="signupPasswordConfirmError"
+                        aria-required="true"
+                        required
+                    >
+                    <div class="form-error">Passwords do not match</div>
+                </div>
+
+                <button type="submit" class="auth-submit btn-ripple">
+                    Create Account
+                </button>
+
+                <div class="auth-divider">
+                    <span class="auth-divider-text">or</span>
+                </div>
+
+                <button type="button" class="btn btn-secondary btn-ripple" id="demoSignup" style="width: 100%;">
+                    Try Demo Mode
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/animations.js"></script>
+    <script>
+        // Tab switching
+        const loginTab = document.getElementById('loginTab');
+        const signupTab = document.getElementById('signupTab');
+        const loginForm = document.getElementById('loginForm');
+        const signupForm = document.getElementById('signupForm');
+        const authMessage = document.getElementById('authMessage');
+
+        loginTab.addEventListener('click', () => {
+            loginTab.classList.add('active');
+            signupTab.classList.remove('active');
+            loginForm.style.display = 'flex';
+            signupForm.style.display = 'none';
+            authMessage.innerHTML = '';
+        });
+
+        signupTab.addEventListener('click', () => {
+            signupTab.classList.add('active');
+            loginTab.classList.remove('active');
+            signupForm.style.display = 'flex';
+            loginForm.style.display = 'none';
+            authMessage.innerHTML = '';
+        });
+
+        // Password toggle
+        document.getElementById('toggleLoginPassword').addEventListener('click', function() {
+            const input = document.getElementById('loginPassword');
+            input.type = input.type === 'password' ? 'text' : 'password';
+            this.textContent = input.type === 'password' ? '👁️' : '🙈';
+        });
+
+        document.getElementById('toggleSignupPassword').addEventListener('click', function() {
+            const input = document.getElementById('signupPassword');
+            input.type = input.type === 'password' ? 'text' : 'password';
+            this.textContent = input.type === 'password' ? '👁️' : '🙈';
+        });
+
+        // Password strength indicator
+        document.getElementById('signupPassword').addEventListener('input', function() {
+            const password = this.value;
+            const strengthBar = document.getElementById('passwordStrengthBar');
+            const strengthText = document.getElementById('passwordStrengthText');
+            
+            const strength = auth.checkPasswordStrength(password);
+            
+            strengthBar.className = 'password-strength-bar ' + strength;
+            
+            const strengthLabels = {
+                weak: 'Weak password',
+                medium: 'Medium strength',
+                strong: 'Strong password'
+            };
+            
+            strengthText.textContent = password.length > 0 ? strengthLabels[strength] : '';
+        });
+
+        // Login form submission
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const rememberMe = document.getElementById('rememberMe').checked;
+            
+            try {
+                const submitBtn = loginForm.querySelector('.auth-submit');
+                submitBtn.classList.add('loading');
+                submitBtn.disabled = true;
+                
+                // Simulate async operation
+                await new Promise(resolve => setTimeout(resolve, 500));
+                
+                const user = auth.login(email, password, rememberMe);
+                
+                authMessage.innerHTML = '<div class="auth-success animate-fade-in-down">✓ Login successful! Redirecting...</div>';
+                
+                setTimeout(() => {
+                    window.location.href = 'app.html';
+                }, 1000);
+                
+            } catch (error) {
+                const submitBtn = loginForm.querySelector('.auth-submit');
+                submitBtn.classList.remove('loading');
+                submitBtn.disabled = false;
+                
+                authMessage.innerHTML = `<div class="auth-error animate-shake">${error.message}</div>`;
+                
+                setTimeout(() => {
+                    authMessage.innerHTML = '';
+                }, 5000);
+            }
+        });
+
+        // Signup form submission
+        signupForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('signupUsername').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const passwordConfirm = document.getElementById('signupPasswordConfirm').value;
+            
+            // Validate passwords match
+            if (password !== passwordConfirm) {
+                authMessage.innerHTML = '<div class="auth-error animate-shake">Passwords do not match</div>';
+                setTimeout(() => authMessage.innerHTML = '', 5000);
+                return;
+            }
+            
+            try {
+                const submitBtn = signupForm.querySelector('.auth-submit');
+                submitBtn.classList.add('loading');
+                submitBtn.disabled = true;
+                
+                // Simulate async operation
+                await new Promise(resolve => setTimeout(resolve, 500));
+                
+                const user = auth.signup(email, password, username);
+                
+                authMessage.innerHTML = '<div class="auth-success animate-fade-in-down">✓ Account created! Logging you in...</div>';
+                
+                // Auto-login after signup
+                setTimeout(() => {
+                    auth.login(email, password, true);
+                    window.location.href = 'app.html';
+                }, 1000);
+                
+            } catch (error) {
+                const submitBtn = signupForm.querySelector('.auth-submit');
+                submitBtn.classList.remove('loading');
+                submitBtn.disabled = false;
+                
+                authMessage.innerHTML = `<div class="auth-error animate-shake">${error.message}</div>`;
+                
+                setTimeout(() => {
+                    authMessage.innerHTML = '';
+                }, 5000);
+            }
+        });
+
+        // Demo mode
+        document.getElementById('demoLogin').addEventListener('click', () => {
+            auth.loginAsDemo();
+            authMessage.innerHTML = '<div class="auth-success animate-fade-in-down">✓ Demo mode activated! Redirecting...</div>';
+            setTimeout(() => {
+                window.location.href = 'app.html';
+            }, 1000);
+        });
+
+        document.getElementById('demoSignup').addEventListener('click', () => {
+            auth.loginAsDemo();
+            authMessage.innerHTML = '<div class="auth-success animate-fade-in-down">✓ Demo mode activated! Redirecting...</div>';
+            setTimeout(() => {
+                window.location.href = 'app.html';
+            }, 1000);
+        });
+
+        // Forgot password (placeholder)
+        document.getElementById('forgotPasswordLink').addEventListener('click', (e) => {
+            e.preventDefault();
+            authMessage.innerHTML = '<div class="auth-success animate-fade-in-down">Password reset feature coming soon! For now, you can create a new account.</div>';
+            setTimeout(() => authMessage.innerHTML = '', 5000);
+        });
+
+        // Check if already logged in
+        if (auth.isLoggedIn()) {
+            window.location.href = 'app.html';
+        }
+    </script>
+</body>
+</html>

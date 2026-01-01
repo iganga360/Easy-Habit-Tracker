@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📊 Easy Habit Tracker</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#x1F4CA;</text></svg>">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/animations.css">
+</head>
+<body>
+    <!-- Dark Mode Toggle & User Profile -->
+    <div style="position: fixed; top: 20px; right: 20px; z-index: 1000; display: flex; gap: 15px; align-items: center;">
+        <div id="userProfile" style="display: flex; align-items: center; gap: 10px; background: var(--bg-card); padding: 8px 15px; border-radius: 25px; box-shadow: var(--shadow); cursor: pointer;">
+            <div id="userAvatar" style="width: 35px; height: 35px; border-radius: 50%; background: var(--primary-color); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1.1rem;"></div>
+            <span id="userName" style="font-weight: 500; color: var(--text-primary);"></span>
+        </div>
+        <button id="darkModeToggle" class="btn btn-secondary btn-ripple" style="padding: 10px 20px;" title="Toggle Dark Mode">
+            <span id="darkModeIcon">🌙</span>
+        </button>
+    </div>
+
+    <header>
+        <h1>📊 Easy Habit Tracker</h1>
+        <p>Build better habits, one day at a time</p>
+        <div class="current-date" id="currentDate"></div>
+    </header>
+
+    <div class="container">
+        <!-- Quote of the Day -->
+        <div id="quoteContainer"></div>
+
+        <!-- Navigation Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="daily">📅 Daily Tracker</button>
+            <button class="tab-btn" data-tab="calendar">📆 Calendar View</button>
+            <button class="tab-btn" data-tab="wellness">💚 Wellness</button>
+            <button class="tab-btn" data-tab="stats">📈 Statistics</button>
+            <button class="tab-btn" data-tab="profile">👤 Profile</button>
+            <button class="tab-btn" data-tab="settings">⚙️ Settings</button>
+        </div>
+
+        <!-- Progress Overview -->
+        <div class="progress-overview">
+            <div class="progress-card">
+                <h3>Today's Progress</h3>
+                <div class="value" id="todayProgress">0%</div>
+                <div class="label"><span id="todayCompleted">0</span> of <span id="todayTotal">0</span> habits</div>
+            </div>
+            <div class="progress-card">
+                <h3>Weekly Progress</h3>
+                <div class="value" id="weeklyProgress">0%</div>
+                <div class="label">This week</div>
+            </div>
+            <div class="progress-card">
+                <h3>Monthly Progress</h3>
+                <div class="value" id="monthlyProgress">0%</div>
+                <div class="label">This month</div>
+            </div>
+            <div class="progress-card">
+                <h3>Current Streak</h3>
+                <div class="value" id="currentStreak">0</div>
+                <div class="label">days in a row</div>
+            </div>
+        </div>
+
+        <!-- Daily Tracker Tab -->
+        <div class="tab-content active" id="daily">
+            <div class="card">
+                <h2>➕ Add New Habit</h2>
+                <form class="add-habit-form" id="addHabitForm">
+                    <input type="text" id="habitName" placeholder="Enter habit name..." required>
+                    <select id="habitCategory">
+                        <option value="health">🏥 Health & Fitness</option>
+                        <option value="learning">🧠 Learning</option>
+                        <option value="productivity">💼 Productivity</option>
+                        <option value="mindfulness">🧘 Mindfulness</option>
+                        <option value="social">👥 Social</option>
+                        <option value="creative">🎨 Creative</option>
+                        <option value="home">🏠 Home</option>
+                        <option value="other">📌 Other</option>
+                    </select>
+                    <button type="submit">Add Habit</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h2>✅ Today's Habits</h2>
+                <div class="progress-bar-container">
+                    <div class="progress-bar">
+                        <div class="progress-bar-fill" id="dailyProgressBar" style="width: 0%"></div>
+                    </div>
+                    <div class="progress-text">
+                        <span id="progressLabel">0 completed</span>
+                        <span id="progressPercent">0%</span>
+                    </div>
+                </div>
+                <div class="habit-list" id="habitList">
+                    <!-- Habits will be dynamically added here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Calendar View Tab -->
+        <div class="tab-content" id="calendar">
+            <div class="card">
+                <h2>📆 Monthly Overview</h2>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <button class="btn btn-secondary" id="prevMonth">← Previous</button>
+                    <h3 id="calendarMonth"></h3>
+                    <button class="btn btn-secondary" id="nextMonth">Next →</button>
+                </div>
+                <div class="calendar-grid" id="calendarGrid">
+                    <div class="calendar-header">Sun</div>
+                    <div class="calendar-header">Mon</div>
+                    <div class="calendar-header">Tue</div>
+                    <div class="calendar-header">Wed</div>
+                    <div class="calendar-header">Thu</div>
+                    <div class="calendar-header">Fri</div>
+                    <div class="calendar-header">Sat</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Wellness Tab -->
+        <div class="tab-content" id="wellness">
+            <div class="card">
+                <h2>💚 Self-Check Zone</h2>
+                <div class="wellness-grid">
+                    <div class="wellness-card">
+                        <h3>😴 Sleep Tracking</h3>
+                        <div class="wellness-input">
+                            <input type="number" id="sleepHours" min="0" max="24" step="0.5" placeholder="0">
+                            <span>hours slept last night</span>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar">
+                                <div class="progress-bar-fill" id="sleepProgress" style="width: 0%"></div>
+                            </div>
+                            <div class="progress-text">
+                                <span>Goal: 8 hours</span>
+                                <span id="sleepPercent">0%</span>
+                            </div>
+                        </div>
+                        <p style="margin-top: 10px; color: var(--text-secondary);">
+                            Average this week: <strong id="avgSleep">0</strong> hours
+                        </p>
+                    </div>
+
+                    <div class="wellness-card">
+                        <h3>💧 Water Intake</h3>
+                        <div class="wellness-input">
+                            <input type="number" id="waterGlasses" min="0" max="20" placeholder="0">
+                            <span>glasses today</span>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar">
+                                <div class="progress-bar-fill" id="waterProgress" style="width: 0%"></div>
+                            </div>
+                            <div class="progress-text">
+                                <span>Goal: 8 glasses</span>
+                                <span id="waterPercent">0%</span>
+                            </div>
+                        </div>
+                        <p style="margin-top: 10px; color: var(--text-secondary);">
+                            Average this week: <strong id="avgWater">0</strong> glasses
+                        </p>
+                    </div>
+
+                    <div class="wellness-card">
+                        <h3>😊 Today's Mood</h3>
+                        <div class="mood-buttons">
+                            <button class="mood-btn" data-mood="amazing">😁</button>
+                            <button class="mood-btn" data-mood="good">😊</button>
+                            <button class="mood-btn" data-mood="okay">😐</button>
+                            <button class="mood-btn" data-mood="sad">😔</button>
+                            <button class="mood-btn" data-mood="bad">😞</button>
+                        </div>
+                        <p style="margin-top: 15px; color: var(--text-secondary);">
+                            Current mood: <strong id="currentMood">Not set</strong>
+                        </p>
+                    </div>
+
+                    <div class="wellness-card">
+                        <h3>📝 Daily Reflection</h3>
+                        <textarea id="dailyReflection" placeholder="What are you grateful for today? What went well? What could be better?" style="width: 100%; height: 100px; padding: 10px; border: 2px solid var(--border-color); border-radius: 8px; resize: vertical; font-family: inherit;"></textarea>
+                        <button class="btn btn-primary" style="margin-top: 10px;" id="saveReflection">Save Reflection</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Tab -->
+        <div class="tab-content" id="stats">
+            <div class="stats-grid">
+                <div class="card">
+                    <h2>📊 Weekly Performance</h2>
+                    <div class="chart-container" id="weeklyChart">
+                        <!-- Bar chart will be generated here -->
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>🏆 Top 10 Most Consistent Habits</h2>
+                    <div class="ranking-list" id="habitRanking">
+                        <!-- Rankings will be generated here -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>📈 Overall Statistics</h2>
+                <div class="progress-overview">
+                    <div class="progress-card">
+                        <h3>Total Habits</h3>
+                        <div class="value" id="totalHabits">0</div>
+                        <div class="label">active habits</div>
+                    </div>
+                    <div class="progress-card">
+                        <h3>Total Completions</h3>
+                        <div class="value" id="totalCompletions">0</div>
+                        <div class="label">all time</div>
+                    </div>
+                    <div class="progress-card">
+                        <h3>Best Streak</h3>
+                        <div class="value" id="bestStreak">0</div>
+                        <div class="label">days</div>
+                    </div>
+                    <div class="progress-card">
+                        <h3>Days Tracked</h3>
+                        <div class="value" id="daysTracked">0</div>
+                        <div class="label">total days</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Tab -->
+        <div class="tab-content" id="profile">
+            <div class="card">
+                <h2>👤 My Profile</h2>
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 20px; padding: 20px;">
+                    <div id="profileAvatar" style="width: 100px; height: 100px; border-radius: 50%; background: var(--primary-color); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 3rem; box-shadow: var(--shadow);"></div>
+                    
+                    <div style="width: 100%; max-width: 500px;">
+                        <div class="form-group" style="margin-bottom: 20px;">
+                            <label class="form-label" style="display: block; margin-bottom: 8px; font-weight: 500;">Username</label>
+                            <input type="text" id="profileUsername" class="form-input" style="width: 100%; padding: 12px; border: 2px solid var(--border-color); border-radius: 8px; font-size: 1rem;" placeholder="Enter your username">
+                        </div>
+                        
+                        <div class="form-group" style="margin-bottom: 20px;">
+                            <label class="form-label" style="display: block; margin-bottom: 8px; font-weight: 500;">Email</label>
+                            <input type="email" id="profileEmail" class="form-input" style="width: 100%; padding: 12px; border: 2px solid var(--border-color); border-radius: 8px; font-size: 1rem;" placeholder="Enter your email" disabled>
+                        </div>
+                        
+                        <button class="btn btn-primary btn-ripple" id="updateProfileBtn" style="width: 100%;">
+                            💾 Update Profile
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>🏆 Achievements</h2>
+                <div id="achievementsContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;">
+                    <!-- Achievements will be dynamically added here -->
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>🔐 Account Actions</h2>
+                <div class="actions">
+                    <button class="btn btn-danger btn-ripple" id="logoutBtn">
+                        🚪 Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Tab -->
+        <div class="tab-content" id="settings">
+            <div class="card">
+                <h2>⚙️ Settings</h2>
+                <div class="settings-grid">
+                    <div class="setting-item">
+                        <div>
+                            <div class="setting-label">Daily Sleep Goal</div>
+                            <div style="color: var(--text-secondary); font-size: 0.9rem;">Hours of sleep per night</div>
+                        </div>
+                        <input type="number" id="sleepGoal" value="8" min="4" max="12" style="width: 80px; padding: 8px; border: 2px solid var(--border-color); border-radius: 5px; text-align: center;">
+                    </div>
+                    <div class="setting-item">
+                        <div>
+                            <div class="setting-label">Daily Water Goal</div>
+                            <div style="color: var(--text-secondary); font-size: 0.9rem;">Glasses of water per day</div>
+                        </div>
+                        <input type="number" id="waterGoal" value="8" min="4" max="20" style="width: 80px; padding: 8px; border: 2px solid var(--border-color); border-radius: 5px; text-align: center;">
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>💾 Data Management</h2>
+                <div class="actions">
+                    <button class="btn btn-primary" id="exportData">📥 Export Data</button>
+                    <button class="btn btn-secondary" id="importData">📤 Import Data</button>
+                    <button class="btn btn-danger" id="clearData">🗑️ Clear All Data</button>
+                </div>
+                <input type="file" id="importFile" accept=".json" style="display: none;">
+                <p style="margin-top: 15px; color: var(--text-secondary); font-size: 0.9rem;">
+                    Your data is stored locally in your browser. Export regularly to keep a backup!
+                </p>
+            </div>
+
+            <div class="card">
+                <h2>📖 Quick Start Guide</h2>
+                <div style="line-height: 1.8;">
+                    <p><strong>1. Add Habits:</strong> Use the form above to add habits you want to track daily.</p>
+                    <p><strong>2. Check Off:</strong> Click the checkbox next to each habit when completed.</p>
+                    <p><strong>3. Track Wellness:</strong> Log your sleep, water intake, and mood in the Wellness tab.</p>
+                    <p><strong>4. Review Progress:</strong> Check the Statistics tab to see your consistency rankings.</p>
+                    <p><strong>5. Export Data:</strong> Save your data regularly using the Export button above.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>📊 Easy Habit Tracker | Build better habits, one day at a time</p>
+        <p>Data stored locally in your browser • <a href="https://github.com/iganga360/Easy-Habit-Tracker" target="_blank">View on GitHub</a></p>
+    </footer>
+
+    <script>
+        // ============================================
+        // Easy Habit Tracker - JavaScript Application
+        // ============================================
+
+        // Utility Functions
+        const getDateKey = (date = new Date()) => {
+            return date.toISOString().split('T')[0];
+        };
+
+        const formatDate = (date) => {
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            return date.toLocaleDateString('en-US', options);
+        };
+
+        // Data Management
+        class HabitTracker {
+            constructor() {
+                this.loadData();
+                this.currentMonth = new Date();
+                this.init();
+            }
+
+            loadData() {
+                try {
+                    const savedData = localStorage.getItem('habitTrackerData');
+                    if (savedData) {
+                        const parsed = JSON.parse(savedData);
+                        this.habits = parsed.habits || [];
+                        this.completions = parsed.completions || {};
+                        this.wellness = parsed.wellness || {};
+                        this.settings = parsed.settings || { sleepGoal: 8, waterGoal: 8 };
+                        this.stats = parsed.stats || { bestStreak: 0, totalCompletions: 0 };
+                    } else {
+                        this.initDefaults();
+                    }
+                } catch (e) {
+                    console.warn('Could not load data from localStorage:', e.message);
+                    this.initDefaults();
+                }
+            }
+
+            initDefaults() {
+                this.habits = [];
+                this.completions = {};
+                this.wellness = {};
+                this.settings = { sleepGoal: 8, waterGoal: 8 };
+                this.stats = { bestStreak: 0, totalCompletions: 0 };
+                this.addDefaultHabits();
+            }
+
+            addDefaultHabits() {
+                const defaults = [
+                    { name: 'Exercise (30 min)', category: 'health' },
+                    { name: 'Drink 8 glasses of water', category: 'health' },
+                    { name: 'Read for 20 minutes', category: 'learning' },
+                    { name: 'Meditate (5 min)', category: 'mindfulness' },
+                    { name: 'Journal / Reflection', category: 'mindfulness' },
+                    { name: 'Make your bed', category: 'home' },
+                    { name: 'Healthy breakfast', category: 'health' },
+                    { name: 'No phone after 9 PM', category: 'productivity' }
+                ];
+                defaults.forEach(h => this.addHabit(h.name, h.category, false));
+                this.saveData();
+            }
+
+            saveData() {
+                try {
+                    const data = {
+                        habits: this.habits,
+                        completions: this.completions,
+                        wellness: this.wellness,
+                        settings: this.settings,
+                        stats: this.stats
+                    };
+                    localStorage.setItem('habitTrackerData', JSON.stringify(data));
+                } catch (e) {
+                    console.warn('Could not save data to localStorage:', e.message);
+                    showNotification('Could not save data. Storage may be full or disabled.', 'error');
+                }
+            }
+
+            addHabit(name, category, save = true) {
+                const habit = {
+                    id: typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+                    name,
+                    category,
+                    createdAt: getDateKey()
+                };
+                this.habits.push(habit);
+                if (save) {
+                    this.saveData();
+                    this.renderHabits();
+                    this.updateProgress();
+                    showNotification('Habit added successfully!', 'success');
+                }
+                return habit;
+            }
+
+            deleteHabit(id) {
+                this.habits = this.habits.filter(h => h.id !== id);
+                this.saveData();
+                this.renderHabits();
+                this.updateProgress();
+                showNotification('Habit deleted', 'success');
+            }
+
+            toggleCompletion(habitId) {
+                const today = getDateKey();
+                if (!this.completions[today]) {
+                    this.completions[today] = [];
+                }
+
+                const index = this.completions[today].indexOf(habitId);
+                if (index > -1) {
+                    this.completions[today].splice(index, 1);
+                } else {
+                    this.completions[today].push(habitId);
+                    this.stats.totalCompletions++;
+                }
+
+                this.saveData();
+                this.renderHabits();
+                this.updateProgress();
+            }
+
+            isCompleted(habitId, date = getDateKey()) {
+                return this.completions[date]?.includes(habitId) || false;
+            }
+
+            getCompletionRate(date = getDateKey()) {
+                const completed = this.completions[date]?.length || 0;
+                const total = this.habits.length;
+                return total > 0 ? Math.round((completed / total) * 100) : 0;
+            }
+
+            getWeeklyProgress() {
+                const today = new Date();
+                let totalCompleted = 0;
+                let totalPossible = 0;
+
+                for (let i = 0; i < 7; i++) {
+                    const date = new Date(today);
+                    date.setDate(date.getDate() - i);
+                    const dateKey = getDateKey(date);
+                    totalCompleted += this.completions[dateKey]?.length || 0;
+                    totalPossible += this.habits.length;
+                }
+
+                return totalPossible > 0 ? Math.round((totalCompleted / totalPossible) * 100) : 0;
+            }
+
+            getMonthlyProgress() {
+                const today = new Date();
+                const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+                const currentDay = today.getDate();
+                let totalCompleted = 0;
+                let totalPossible = 0;
+
+                for (let i = 1; i <= currentDay; i++) {
+                    const date = new Date(today.getFullYear(), today.getMonth(), i);
+                    const dateKey = getDateKey(date);
+                    totalCompleted += this.completions[dateKey]?.length || 0;
+                    totalPossible += this.habits.length;
+                }
+
+                return totalPossible > 0 ? Math.round((totalCompleted / totalPossible) * 100) : 0;
+            }
+
+            getCurrentStreak() {
+                let streak = 0;
+                const today = new Date();
+                const maxDays = 90; // Limit iteration for performance
+
+                for (let i = 0; i < maxDays; i++) {
+                    const date = new Date(today);
+                    date.setDate(date.getDate() - i);
+                    const dateKey = getDateKey(date);
+                    const rate = this.getCompletionRate(dateKey);
+
+                    if (rate >= 50) {
+                        streak++;
+                    } else if (i > 0) {
+                        break;
+                    }
+                }
+
+                if (streak > this.stats.bestStreak) {
+                    this.stats.bestStreak = streak;
+                    this.saveData();
+                }
+
+                return streak;
+            }
+
+            getHabitConsistency(habitId) {
+                let completed = 0;
+                let total = 0;
+                const today = new Date();
+
+                for (let i = 0; i < 30; i++) {
+                    const date = new Date(today);
+                    date.setDate(date.getDate() - i);
+                    const dateKey = getDateKey(date);
+                    if (this.isCompleted(habitId, dateKey)) {
+                        completed++;
+                    }
+                    total++;
+                }
+
+                return total > 0 ? Math.round((completed / total) * 100) : 0;
+            }
+
+            getTopHabits(count = 10) {
+                return this.habits
+                    .map(h => ({
+                        ...h,
+                        consistency: this.getHabitConsistency(h.id)
+                    }))
+                    .sort((a, b) => b.consistency - a.consistency)
+                    .slice(0, count);
+            }
+
+            saveWellness(type, value) {
+                const today = getDateKey();
+                if (!this.wellness[today]) {
+                    this.wellness[today] = {};
+                }
+                this.wellness[today][type] = value;
+                this.saveData();
+            }
+
+            getWellness(type, date = getDateKey()) {
+                return this.wellness[date]?.[type] || null;
+            }
+
+            getWeeklyWellnessAvg(type) {
+                const today = new Date();
+                let total = 0;
+                let count = 0;
+
+                for (let i = 0; i < 7; i++) {
+                    const date = new Date(today);
+                    date.setDate(date.getDate() - i);
+                    const dateKey = getDateKey(date);
+                    const value = this.getWellness(type, dateKey);
+                    if (value !== null && !isNaN(value)) {
+                        total += parseFloat(value);
+                        count++;
+                    }
+                }
+
+                return count > 0 ? (total / count).toFixed(1) : 0;
+            }
+
+            // Export/Import
+            exportData() {
+                const data = {
+                    habits: this.habits,
+                    completions: this.completions,
+                    wellness: this.wellness,
+                    settings: this.settings,
+                    stats: this.stats,
+                    exportedAt: new Date().toISOString()
+                };
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `habit-tracker-backup-${getDateKey()}.json`;
+                a.click();
+                URL.revokeObjectURL(url);
+                showNotification('Data exported successfully!', 'success');
+            }
+
+            importData(file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        if (!data || typeof data !== 'object') {
+                            throw new Error('Invalid data structure');
+                        }
+                        this.habits = Array.isArray(data.habits) ? data.habits : [];
+                        this.completions = data.completions || {};
+                        this.wellness = data.wellness || {};
+                        this.settings = data.settings || { sleepGoal: 8, waterGoal: 8 };
+                        this.stats = data.stats || { bestStreak: 0, totalCompletions: 0 };
+                        this.saveData();
+                        this.renderAll();
+                        showNotification('Data imported successfully!', 'success');
+                    } catch (err) {
+                        console.error('Import error:', err);
+                        showNotification('Error importing data: ' + (err.message || 'Invalid JSON format. Please ensure the file is a valid habit tracker backup.'), 'error');
+                    }
+                };
+                reader.onerror = () => {
+                    showNotification('Error reading file. Please try again.', 'error');
+                };
+                reader.readAsText(file);
+            }
+
+            clearData() {
+                if (confirm('Are you sure you want to clear all data? This cannot be undone!')) {
+                    localStorage.removeItem('habitTrackerData');
+                    this.habits = [];
+                    this.completions = {};
+                    this.wellness = {};
+                    this.settings = { sleepGoal: 8, waterGoal: 8 };
+                    this.stats = { bestStreak: 0, totalCompletions: 0 };
+                    this.renderAll();
+                    showNotification('All data cleared', 'success');
+                }
+            }
+
+            // Rendering
+            renderHabits() {
+                const container = document.getElementById('habitList');
+                const today = getDateKey();
+
+                if (this.habits.length === 0) {
+                    container.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 20px;">No habits yet. Add your first habit above!</p>';
+                    return;
+                }
+
+                container.innerHTML = this.habits.map(habit => {
+                    const isCompleted = this.isCompleted(habit.id);
+                    const streak = this.getHabitConsistency(habit.id);
+                    const categoryColors = {
+                        health: '#4CAF50',
+                        learning: '#9C27B0',
+                        productivity: '#FF9800',
+                        mindfulness: '#00BCD4',
+                        social: '#E91E63',
+                        creative: '#FF5722',
+                        home: '#795548',
+                        other: '#607D8B'
+                    };
+
+                    return `
+                        <div class="habit-item ${isCompleted ? 'completed' : ''}" data-id="${habit.id}">
+                            <input type="checkbox" class="habit-checkbox" ${isCompleted ? 'checked' : ''}>
+                            <span class="habit-name">${this.escapeHtml(habit.name)}</span>
+                            <span class="habit-category" style="background: ${categoryColors[habit.category] || categoryColors.other}">${habit.category}</span>
+                            <span class="habit-streak">🔥 ${streak}%</span>
+                            <button class="habit-delete" title="Delete habit">×</button>
+                        </div>
+                    `;
+                }).join('');
+
+                // Add event listeners
+                container.querySelectorAll('.habit-checkbox').forEach(cb => {
+                    cb.addEventListener('change', (e) => {
+                        const id = e.target.closest('.habit-item').dataset.id;
+                        this.toggleCompletion(id);
+                    });
+                });
+
+                container.querySelectorAll('.habit-delete').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const id = e.target.closest('.habit-item').dataset.id;
+                        if (confirm('Delete this habit?')) {
+                            this.deleteHabit(id);
+                        }
+                    });
+                });
+            }
+
+            updateProgress() {
+                const today = getDateKey();
+                const completed = this.completions[today]?.length || 0;
+                const total = this.habits.length;
+                const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+                document.getElementById('todayProgress').textContent = percent + '%';
+                document.getElementById('todayCompleted').textContent = completed;
+                document.getElementById('todayTotal').textContent = total;
+                document.getElementById('dailyProgressBar').style.width = percent + '%';
+                document.getElementById('progressLabel').textContent = `${completed} completed`;
+                document.getElementById('progressPercent').textContent = percent + '%';
+
+                document.getElementById('weeklyProgress').textContent = this.getWeeklyProgress() + '%';
+                document.getElementById('monthlyProgress').textContent = this.getMonthlyProgress() + '%';
+                document.getElementById('currentStreak').textContent = this.getCurrentStreak();
+            }
+
+            renderCalendar() {
+                const grid = document.getElementById('calendarGrid');
+                const monthLabel = document.getElementById('calendarMonth');
+                const year = this.currentMonth.getFullYear();
+                const month = this.currentMonth.getMonth();
+
+                monthLabel.textContent = new Date(year, month).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+                // Clear previous days (keep headers)
+                const headers = grid.querySelectorAll('.calendar-header');
+                grid.innerHTML = '';
+                headers.forEach(h => grid.appendChild(h.cloneNode(true)));
+
+                const firstDay = new Date(year, month, 1).getDay();
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+                const today = new Date();
+                const todayKey = getDateKey();
+
+                // Add empty cells for days before the first day
+                for (let i = 0; i < firstDay; i++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'calendar-day other-month';
+                    grid.appendChild(cell);
+                }
+
+                // Add days
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const date = new Date(year, month, day);
+                    const dateKey = getDateKey(date);
+                    const rate = this.getCompletionRate(dateKey);
+                    const isToday = dateKey === todayKey;
+
+                    const cell = document.createElement('div');
+                    cell.className = 'calendar-day';
+                    if (isToday) cell.classList.add('today');
+                    if (rate >= 80) cell.classList.add('completed');
+                    else if (rate >= 50) cell.classList.add('partial');
+
+                    cell.innerHTML = `
+                        <span class="date-num">${day}</span>
+                        <span class="completion-rate">${rate}%</span>
+                    `;
+
+                    grid.appendChild(cell);
+                }
+            }
+
+            renderWellness() {
+                const today = getDateKey();
+
+                // Sleep
+                const sleep = this.getWellness('sleep');
+                if (sleep) {
+                    document.getElementById('sleepHours').value = sleep;
+                    const sleepGoal = this.settings.sleepGoal;
+                    const sleepPercent = Math.min(100, Math.round((sleep / sleepGoal) * 100));
+                    document.getElementById('sleepProgress').style.width = sleepPercent + '%';
+                    document.getElementById('sleepPercent').textContent = sleepPercent + '%';
+                }
+                document.getElementById('avgSleep').textContent = this.getWeeklyWellnessAvg('sleep');
+
+                // Water
+                const water = this.getWellness('water');
+                if (water) {
+                    document.getElementById('waterGlasses').value = water;
+                    const waterGoal = this.settings.waterGoal;
+                    const waterPercent = Math.min(100, Math.round((water / waterGoal) * 100));
+                    document.getElementById('waterProgress').style.width = waterPercent + '%';
+                    document.getElementById('waterPercent').textContent = waterPercent + '%';
+                }
+                document.getElementById('avgWater').textContent = this.getWeeklyWellnessAvg('water');
+
+                // Mood
+                const mood = this.getWellness('mood');
+                document.querySelectorAll('.mood-btn').forEach(btn => {
+                    btn.classList.toggle('selected', btn.dataset.mood === mood);
+                });
+                document.getElementById('currentMood').textContent = mood ? this.getMoodLabel(mood) : 'Not set';
+
+                // Reflection
+                const reflection = this.getWellness('reflection');
+                if (reflection) {
+                    document.getElementById('dailyReflection').value = reflection;
+                }
+            }
+
+            getMoodLabel(mood) {
+                const labels = {
+                    amazing: '😁 Amazing',
+                    good: '😊 Good',
+                    okay: '😐 Okay',
+                    sad: '😔 Sad',
+                    bad: '😞 Not Good'
+                };
+                return labels[mood] || mood;
+            }
+
+            renderStats() {
+                // Weekly chart
+                const chartContainer = document.getElementById('weeklyChart');
+                chartContainer.innerHTML = '';
+                const today = new Date();
+                const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+                for (let i = 6; i >= 0; i--) {
+                    const date = new Date(today);
+                    date.setDate(date.getDate() - i);
+                    const dateKey = getDateKey(date);
+                    const rate = this.getCompletionRate(dateKey);
+
+                    const bar = document.createElement('div');
+                    bar.className = 'bar';
+                    bar.style.height = Math.max(5, rate) + '%';
+                    bar.setAttribute('data-value', rate + '%');
+                    bar.innerHTML = `<span class="bar-label">${days[date.getDay()]}</span>`;
+                    chartContainer.appendChild(bar);
+                }
+
+                // Top habits ranking
+                const rankingContainer = document.getElementById('habitRanking');
+                const topHabits = this.getTopHabits(10);
+
+                if (topHabits.length === 0) {
+                    rankingContainer.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 20px;">No habits yet</p>';
+                } else {
+                    rankingContainer.innerHTML = topHabits.map(h => `
+                        <div class="ranking-item">
+                            <span class="ranking-name">${this.escapeHtml(h.name)}</span>
+                            <span class="ranking-percent">${h.consistency}%</span>
+                        </div>
+                    `).join('');
+                }
+
+                // Overall stats
+                document.getElementById('totalHabits').textContent = this.habits.length;
+                document.getElementById('totalCompletions').textContent = this.stats.totalCompletions;
+                document.getElementById('bestStreak').textContent = this.stats.bestStreak;
+
+                // Days tracked
+                const daysTracked = Object.keys(this.completions).length;
+                document.getElementById('daysTracked').textContent = daysTracked;
+            }
+
+            renderAll() {
+                this.renderHabits();
+                this.updateProgress();
+                this.renderCalendar();
+                this.renderWellness();
+                this.renderStats();
+            }
+
+            escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            init() {
+                // Update current date
+                document.getElementById('currentDate').textContent = formatDate(new Date());
+
+                // Initialize settings inputs
+                document.getElementById('sleepGoal').value = this.settings.sleepGoal;
+                document.getElementById('waterGoal').value = this.settings.waterGoal;
+
+                // Initial render
+                this.renderAll();
+
+                // Setup event listeners
+                this.setupEventListeners();
+            }
+
+            setupEventListeners() {
+                // Tab navigation
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                        btn.classList.add('active');
+                        document.getElementById(btn.dataset.tab).classList.add('active');
+
+                        // Refresh content when switching tabs
+                        if (btn.dataset.tab === 'calendar') this.renderCalendar();
+                        if (btn.dataset.tab === 'stats') this.renderStats();
+                        if (btn.dataset.tab === 'wellness') this.renderWellness();
+                    });
+                });
+
+                // Add habit form
+                document.getElementById('addHabitForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const name = document.getElementById('habitName').value.trim();
+                    const category = document.getElementById('habitCategory').value;
+                    if (name) {
+                        this.addHabit(name, category);
+                        document.getElementById('habitName').value = '';
+                    }
+                });
+
+                // Calendar navigation
+                document.getElementById('prevMonth').addEventListener('click', () => {
+                    this.currentMonth.setMonth(this.currentMonth.getMonth() - 1);
+                    this.renderCalendar();
+                });
+
+                document.getElementById('nextMonth').addEventListener('click', () => {
+                    this.currentMonth.setMonth(this.currentMonth.getMonth() + 1);
+                    this.renderCalendar();
+                });
+
+                // Wellness inputs
+                document.getElementById('sleepHours').addEventListener('change', (e) => {
+                    const value = parseFloat(e.target.value);
+                    if (!isNaN(value)) {
+                        this.saveWellness('sleep', value);
+                        this.renderWellness();
+                    }
+                });
+
+                document.getElementById('waterGlasses').addEventListener('change', (e) => {
+                    const value = parseInt(e.target.value);
+                    if (!isNaN(value)) {
+                        this.saveWellness('water', value);
+                        this.renderWellness();
+                    }
+                });
+
+                document.querySelectorAll('.mood-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        this.saveWellness('mood', btn.dataset.mood);
+                        this.renderWellness();
+                    });
+                });
+
+                document.getElementById('saveReflection').addEventListener('click', () => {
+                    const reflection = document.getElementById('dailyReflection').value.trim();
+                    this.saveWellness('reflection', reflection);
+                    showNotification('Reflection saved!', 'success');
+                });
+
+                // Settings
+                document.getElementById('sleepGoal').addEventListener('change', (e) => {
+                    this.settings.sleepGoal = parseInt(e.target.value);
+                    this.saveData();
+                    this.renderWellness();
+                });
+
+                document.getElementById('waterGoal').addEventListener('change', (e) => {
+                    this.settings.waterGoal = parseInt(e.target.value);
+                    this.saveData();
+                    this.renderWellness();
+                });
+
+                // Data management
+                document.getElementById('exportData').addEventListener('click', () => this.exportData());
+                document.getElementById('importData').addEventListener('click', () => {
+                    document.getElementById('importFile').click();
+                });
+                document.getElementById('importFile').addEventListener('change', (e) => {
+                    if (e.target.files.length > 0) {
+                        this.importData(e.target.files[0]);
+                    }
+                });
+                document.getElementById('clearData').addEventListener('click', () => this.clearData());
+            }
+        }
+
+        // Notification function
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Initialize the app
+        const tracker = new HabitTracker();
+    </script>
+
+    <!-- External JavaScript -->
+    <script src="js/auth.js"></script>
+    <script src="js/quotes.js"></script>
+    <script src="js/animations.js"></script>
+    
+    <script>
+        // Check authentication
+        if (!auth.isLoggedIn()) {
+            window.location.href = 'login.html';
+        }
+
+        // Display user info
+        const currentUser = auth.getCurrentUser();
+        if (currentUser) {
+            document.getElementById('userName').textContent = currentUser.username;
+            document.getElementById('userAvatar').textContent = currentUser.avatar.initial;
+            document.getElementById('userAvatar').style.background = currentUser.avatar.color;
+            
+            // Profile page
+            document.getElementById('profileAvatar').textContent = currentUser.avatar.initial;
+            document.getElementById('profileAvatar').style.background = currentUser.avatar.color;
+            document.getElementById('profileUsername').value = currentUser.username;
+            document.getElementById('profileEmail').value = currentUser.email;
+        }
+
+        // Display quote of the day
+        displayQuote('quoteContainer');
+
+        // Dark mode toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const darkModeIcon = document.getElementById('darkModeIcon');
+        
+        // Check saved dark mode preference
+        const isDarkMode = localStorage.getItem('habitTrackerDarkMode') === 'true';
+        if (isDarkMode) {
+            document.body.classList.add('dark-mode');
+            darkModeIcon.textContent = '☀️';
+        }
+
+        darkModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            darkModeIcon.textContent = isDark ? '☀️' : '🌙';
+            localStorage.setItem('habitTrackerDarkMode', isDark.toString());
+            
+            showToast(isDark ? 'Dark mode enabled' : 'Light mode enabled', 'success', 2000);
+        });
+
+        // Profile update
+        document.getElementById('updateProfileBtn').addEventListener('click', () => {
+            const newUsername = document.getElementById('profileUsername').value.trim();
+            
+            if (newUsername && newUsername !== currentUser.username) {
+                try {
+                    const updatedUser = auth.updateProfile({ username: newUsername });
+                    document.getElementById('userName').textContent = updatedUser.username;
+                    showToast('Profile updated successfully!', 'success');
+                } catch (error) {
+                    showToast(error.message, 'error');
+                }
+            }
+        });
+
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            if (confirm('Are you sure you want to logout?')) {
+                auth.logout();
+            }
+        });
+
+        // User profile click - go to profile tab
+        document.getElementById('userProfile').addEventListener('click', () => {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelector('[data-tab="profile"]').classList.add('active');
+            document.getElementById('profile').classList.add('active');
+        });
+
+        // Display achievements
+        function displayAchievements() {
+            const achievements = [
+                { icon: '🔥', name: 'First Streak', desc: 'Complete a 3-day streak', unlocked: tracker.getCurrentStreak() >= 3 },
+                { icon: '💪', name: 'Consistent', desc: 'Complete a 7-day streak', unlocked: tracker.getCurrentStreak() >= 7 },
+                { icon: '🏆', name: 'Champion', desc: 'Complete a 30-day streak', unlocked: tracker.getCurrentStreak() >= 30 },
+                { icon: '✅', name: 'Habit Builder', desc: 'Create 10 habits', unlocked: tracker.habits.length >= 10 },
+                { icon: '📈', name: 'Progress Master', desc: '100% daily completion', unlocked: tracker.getCompletionRate() === 100 },
+                { icon: '🌟', name: 'Dedicated', desc: '500 total completions', unlocked: tracker.stats.totalCompletions >= 500 }
+            ];
+
+            const container = document.getElementById('achievementsContainer');
+            container.innerHTML = achievements.map(achievement => `
+                <div class="card hover-lift" style="padding: 20px; text-align: center; ${achievement.unlocked ? '' : 'opacity: 0.5; filter: grayscale(100%);'}">
+                    <div style="font-size: 3rem; margin-bottom: 10px;">${achievement.icon}</div>
+                    <div style="font-weight: 600; margin-bottom: 5px; color: var(--text-primary);">${achievement.name}</div>
+                    <div style="font-size: 0.85rem; color: var(--text-secondary);">${achievement.desc}</div>
+                    ${achievement.unlocked ? '<div style="margin-top: 10px; color: var(--success-color); font-weight: 600;">✓ Unlocked</div>' : '<div style="margin-top: 10px; color: var(--text-secondary); font-size: 0.85rem;">🔒 Locked</div>'}
+                </div>
+            `).join('');
+        }
+
+        // Call displayAchievements when switching to profile tab
+        const profileTab = document.querySelector('[data-tab="profile"]');
+        if (profileTab) {
+            profileTab.addEventListener('click', () => {
+                setTimeout(displayAchievements, 100);
+            });
+        }
+
+        // Celebrate streaks
+        const currentStreak = tracker.getCurrentStreak();
+        if (currentStreak > 0 && currentStreak % 7 === 0 && tracker.getCompletionRate() === 100) {
+            setTimeout(() => {
+                celebrateStreak(currentStreak);
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
