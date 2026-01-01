@@ -57,6 +57,22 @@ The **Easy Habit Tracker** is a comprehensive Google Sheets habit tracking syste
 
 ---
 
+### 🛠️ [BUILD_GUIDE.md](BUILD_GUIDE.md) - Build From Scratch
+**Complete Google Sheets implementation guide**
+- Exact formulas and cell references
+- Sheet structure and tab setup
+- Day-specific tracking formulas
+- Progress calculation formulas
+- Self-check zone implementation
+- Dashboard & visualization setup
+- Conditional formatting rules
+- Protection & finishing touches
+- Formula reference card
+
+퉺 **Read this when:** You want to build your own tracker from scratch with full formulas
+
+---
+
 ### 💡 [HABIT_IDEAS.md](HABIT_IDEAS.md) - Inspiration
 **100+ habit ideas and 6 starter templates**
 - Health & fitness habits (15+)

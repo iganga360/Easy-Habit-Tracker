@@ -157,6 +157,7 @@ Each habit is color-coded for easy visual scanning:
 
 ### 🎁 Bonus Includes
 - 📖 Step-by-step written instructions
+- 🛠️ Complete build guide with exact formulas ([BUILD_GUIDE.md](BUILD_GUIDE.md))
 - 🎨 2 free Canva templates for habit quote graphics
 - 💬 24/7 creator support via website, email, or live chat
 - 🔒 Lifetime access - use it forever, update forever
@@ -170,6 +171,7 @@ Each habit is color-coded for easy visual scanning:
 - **No downloads needed**: Access directly from Google Drive
 - **Security**: Lightly protected to prevent accidental formula deletion
 - **Backup**: Automatically backed up to your Google Drive
+- **Build Your Own**: See [BUILD_GUIDE.md](BUILD_GUIDE.md) for complete formulas and implementation
 
 ---
 
