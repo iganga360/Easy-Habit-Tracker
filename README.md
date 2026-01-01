@@ -1,8 +1,28 @@
 # 📊 Easy Habit Tracker
 
-A **comprehensive, beginner-friendly habit tracking spreadsheet** with automatic progress calculations, visual insights, and wellness tracking. Track up to 30 daily habits plus weekly, monthly, and yearly goals—all in one beautifully organized Google Sheet.
+A **comprehensive, beginner-friendly habit tracking system** with automatic progress calculations, visual insights, and wellness tracking. Available as both a **live web application** and **Google Sheets template**!
 
 **✨ Trusted by 60,000+ Happy Customers | 5,500+ 5-Star Reviews**
+
+---
+
+## 🌐 Live Web Application
+
+### [**Try it Now! →**](https://iganga360.github.io/Easy-Habit-Tracker/)
+
+The habit tracker is available as a **free, live web application** that you can use instantly in your browser!
+
+**Quick Start:**
+1. **Use Online**: Simply visit the link above to start tracking habits immediately
+2. **Download**: Save the `index.html` file and open it in any browser - works offline!
+3. **Deploy Your Own**: Host it on GitHub Pages, Netlify, or any web server
+
+### Web App Features:
+- ✅ **No installation required** - works in any modern browser
+- ✅ **Offline support** - all data stored locally in your browser
+- ✅ **Mobile responsive** - works on phone, tablet, and desktop
+- ✅ **Export/Import** - backup and restore your data anytime
+- ✅ **Privacy first** - your data never leaves your device
 
 ---
 
@@ -166,12 +186,49 @@ Each habit is color-coded for easy visual scanning:
 
 ## 🛠️ Technical Details
 
+### Web Application
+- **Format**: Single HTML file with embedded CSS & JavaScript
+- **Compatibility**: Works on all modern browsers (Chrome, Firefox, Safari, Edge)
+- **Storage**: Data saved locally in browser's localStorage
+- **Privacy**: No server-side storage - your data stays on your device
+- **Offline**: Works without internet connection after first load
+
+### Google Sheets Version
 - **Format**: Google Sheets (cloud-based, auto-syncing)
 - **Compatibility**: Works on all devices and browsers
 - **No downloads needed**: Access directly from Google Drive
 - **Security**: Lightly protected to prevent accidental formula deletion
 - **Backup**: Automatically backed up to your Google Drive
 - **Build Your Own**: See [BUILD_GUIDE.md](BUILD_GUIDE.md) for complete formulas and implementation
+
+---
+
+## 🚀 Deployment Options
+
+### Option 1: Use Online (Easiest)
+Simply visit: **https://iganga360.github.io/Easy-Habit-Tracker/**
+
+### Option 2: Download & Run Locally
+1. Download `index.html` from this repository
+2. Open it in any web browser
+3. Start tracking! Your data is saved automatically
+
+### Option 3: Deploy to GitHub Pages
+1. Fork this repository
+2. Go to Settings → Pages
+3. Select "main" branch and save
+4. Your tracker will be live at `https://YOUR_USERNAME.github.io/Easy-Habit-Tracker/`
+
+### Option 4: Deploy to Netlify/Vercel
+1. Fork this repository
+2. Connect your GitHub account to Netlify or Vercel
+3. Import this repository
+4. Deploy with default settings
+
+### Option 5: Self-Host
+1. Download `index.html`
+2. Upload to any web server (Apache, Nginx, etc.)
+3. Access via your domain
 
 ---
 
