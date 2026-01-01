@@ -1,0 +1,253 @@
+{
+  "tracker_metadata": {
+    "name": "Easy Habit Tracker",
+    "version": "1.0",
+    "created_date": "2026-01-01",
+    "description": "Comprehensive habit tracking system with day-specific assignment, automatic progress calculation, wellness tracking, and visual insights"
+  },
+  "daily_habits": [
+    {
+      "id": 1,
+      "name": "Exercise or Move Your Body",
+      "category": "Health & Fitness",
+      "daily_goal": 30,
+      "unit": "minutes",
+      "monthly_goal": 31,
+      "days_selected": "Mon,Wed,Fri",
+      "color_code": "Blue",
+      "priority": "High",
+      "completions_month": 12,
+      "completion_percentage": 39,
+      "notes": "Gym, walk, yoga, sports"
+    },
+    {
+      "id": 2,
+      "name": "Drink 2L of Water",
+      "category": "Health & Fitness",
+      "daily_goal": 2,
+      "unit": "liters",
+      "monthly_goal": 31,
+      "days_selected": "All",
+      "color_code": "Cyan",
+      "priority": "High",
+      "completions_month": 28,
+      "completion_percentage": 90,
+      "notes": "Stay hydrated throughout the day"
+    },
+    {
+      "id": 3,
+      "name": "Read for 20 Minutes",
+      "category": "Learning",
+      "daily_goal": 20,
+      "unit": "minutes",
+      "monthly_goal": 31,
+      "days_selected": "All",
+      "color_code": "Purple",
+      "priority": "Medium",
+      "completions_month": 24,
+      "completion_percentage": 77,
+      "notes": "Books, articles, or educational content"
+    },
+    {
+      "id": 4,
+      "name": "Sleep 7+ Hours",
+      "category": "Health & Fitness",
+      "daily_goal": 7,
+      "unit": "hours",
+      "monthly_goal": 31,
+      "days_selected": "All",
+      "color_code": "Navy",
+      "priority": "Critical",
+      "completions_month": 25,
+      "completion_percentage": 81,
+      "notes": "Proper sleep schedule for recovery"
+    },
+    {
+      "id": 5,
+      "name": "Write in Journal",
+      "category": "Personal Growth",
+      "daily_goal": 10,
+      "unit": "minutes",
+      "monthly_goal": 31,
+      "days_selected": "All",
+      "color_code": "Gold",
+      "priority": "Medium",
+      "completions_month": 17,
+      "completion_percentage": 55,
+      "notes": "Reflection and gratitude practice"
+    }
+  ],
+  "weekly_habits": [
+    {
+      "id": 101,
+      "name": "Meal Prep",
+      "category": "Home & Organization",
+      "frequency": "1-2 times per week",
+      "days_preferred": "Sunday,Wednesday",
+      "priority": "Medium",
+      "completions_month": 8,
+      "notes": "Prepare meals for the week"
+    },
+    {
+      "id": 102,
+      "name": "Deep Clean",
+      "category": "Home & Organization",
+      "frequency": "1 time per week",
+      "days_preferred": "Saturday",
+      "priority": "Low",
+      "completions_month": 4,
+      "notes": "Deep clean one area of home"
+    }
+  ],
+  "monthly_habits": [
+    {
+      "id": 201,
+      "name": "Organize Digital Files",
+      "category": "Productivity",
+      "frequency": "1 time per month",
+      "monthly_goal": 1,
+      "completions_month": 1,
+      "priority": "Medium"
+    },
+    {
+      "id": 202,
+      "name": "Review Finances",
+      "category": "Work & Finance",
+      "frequency": "1 time per month",
+      "monthly_goal": 1,
+      "completions_month": 1,
+      "priority": "High"
+    }
+  ],
+  "yearly_habits": [
+    {
+      "id": 301,
+      "name": "Read 12 Books",
+      "category": "Learning",
+      "yearly_goal": 12,
+      "quarterly_target": 3,
+      "completions_year": 5,
+      "priority": "Medium"
+    }
+  ],
+  "weekly_progress": {
+    "week_1": {
+      "date_range": "July 1-7, 2025",
+      "total_target_completions": 79,
+      "actual_completions": 59,
+      "completion_percentage": 75,
+      "status": "On Track"
+    },
+    "week_2": {
+      "date_range": "July 8-14, 2025",
+      "total_target_completions": 79,
+      "actual_completions": 54,
+      "completion_percentage": 68,
+      "status": "Below Target"
+    },
+    "week_3": {
+      "date_range": "July 15-21, 2025",
+      "total_target_completions": 79,
+      "actual_completions": 43,
+      "completion_percentage": 54,
+      "status": "Below Target"
+    },
+    "week_4": {
+      "date_range": "July 22-28, 2025",
+      "total_target_completions": 79,
+      "actual_completions": 48,
+      "completion_percentage": 61,
+      "status": "Below Target"
+    }
+  },
+  "monthly_summary": {
+    "month": "July 2025",
+    "total_possible_completions": 355,
+    "total_actual_completions": 220,
+    "overall_completion_percentage": 62,
+    "status": "Good Progress",
+    "trend": "Recovering"
+  },
+  "consistency_ranking": [
+    {
+      "rank": 1,
+      "habit_name": "Clean or Declutter",
+      "completion_percentage": 100,
+      "completions": 31,
+      "target": 31
+    },
+    {
+      "rank": 2,
+      "habit_name": "Write in Journal",
+      "completion_percentage": 89,
+      "completions": 28,
+      "target": 31
+    },
+    {
+      "rank": 3,
+      "habit_name": "Read for 20 Minutes",
+      "completion_percentage": 84,
+      "completions": 26,
+      "target": 31
+    }
+  ],
+  "wellness_tracking": {
+    "sleep": {
+      "goal_hours": 8,
+      "average_hours": 7.2,
+      "best_day": "Saturday",
+      "worst_day": "Tuesday",
+      "days_goal_met": 14,
+      "trend": "Consistent"
+    },
+    "water_intake": {
+      "goal_glasses": 8,
+      "average_glasses": 6.8,
+      "goal_unit": "glasses",
+      "days_goal_met": 18,
+      "trend": "Improving"
+    },
+    "mood_tracking": {
+      "amazing": 5,
+      "good": 12,
+      "okay": 10,
+      "sad": 3,
+      "not_good": 1,
+      "overall_mood": "Positive",
+      "trend": "Stable"
+    }
+  },
+  "insights_and_patterns": {
+    "top_performing_habits": [
+      "Sleep 7+ Hours",
+      "Drink 2L Water",
+      "Read for 20 Minutes"
+    ],
+    "habits_needing_improvement": [
+      "No Phone After 9PM",
+      "Morning Stretch",
+      "Exercise or Move"
+    ],
+    "best_day_of_week": "Monday",
+    "worst_day_of_week": "Friday",
+    "correlation_found": "Better sleep correlates with higher daily completion percentage"
+  },
+  "settings": {
+    "month_year": "July 2025",
+    "timezone": "IST",
+    "notification_time": "9:00 PM",
+    "sync_frequency": "Real-time",
+    "backup_enabled": true,
+    "color_theme": "Light Mode",
+    "language": "English"
+  },
+  "statistics": {
+    "total_habits_tracked": 13,
+    "days_logged": 31,
+    "average_daily_completion": 7,
+    "best_day_completions": 11,
+    "worst_day_completions": 4,
+    "habit_addition_rate": "2 new habits per month",
+    "habit_removal_rate": "0.5 habits per month"
+  }
+}
