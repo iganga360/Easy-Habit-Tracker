@@ -28,7 +28,7 @@
             </div>
 
             <!-- Login Form -->
-            <form class="auth-form" id="loginForm">
+            <form class="auth-form" id="loginForm" aria-label="Login form">
                 <div class="form-group">
                     <label class="form-label" for="loginEmail">Email</label>
                     <input 
@@ -36,9 +36,11 @@
                         class="form-input" 
                         id="loginEmail" 
                         placeholder="Enter your email"
+                        aria-describedby="loginEmailError"
+                        aria-required="true"
                         required
                     >
-                    <div class="form-error">Please enter a valid email</div>
+                    <div class="form-error" id="loginEmailError" role="alert">Please enter a valid email</div>
                 </div>
 
                 <div class="form-group">
@@ -49,17 +51,19 @@
                             class="form-input" 
                             id="loginPassword" 
                             placeholder="Enter your password"
+                            aria-describedby="loginPasswordError"
+                            aria-required="true"
                             required
                         >
-                        <button type="button" class="password-toggle" id="toggleLoginPassword">
+                        <button type="button" class="password-toggle" id="toggleLoginPassword" aria-label="Toggle password visibility">
                             👁️
                         </button>
                     </div>
-                    <div class="form-error">Password is required</div>
+                    <div class="form-error" id="loginPasswordError" role="alert">Password is required</div>
                 </div>
 
                 <div class="form-checkbox-group">
-                    <input type="checkbox" class="form-checkbox" id="rememberMe">
+                    <input type="checkbox" class="form-checkbox" id="rememberMe" aria-label="Remember me">
                     <label class="form-checkbox-label" for="rememberMe">Remember me</label>
                 </div>
 
@@ -67,7 +71,7 @@
                     <a href="#" class="forgot-password-link" id="forgotPasswordLink">Forgot password?</a>
                 </div>
 
-                <button type="submit" class="auth-submit btn-ripple">
+                <button type="submit" class="auth-submit btn-ripple" aria-label="Login to your account">
                     Login
                 </button>
 
@@ -81,7 +85,7 @@
             </form>
 
             <!-- Signup Form -->
-            <form class="auth-form" id="signupForm" style="display: none;">
+            <form class="auth-form" id="signupForm" style="display: none;" aria-label="Sign up form">
                 <div class="form-group">
                     <label class="form-label" for="signupUsername">Username</label>
                     <input 
@@ -89,6 +93,7 @@
                         class="form-input" 
                         id="signupUsername" 
                         placeholder="Choose a username"
+                        aria-label="Username (optional)"
                     >
                 </div>
 
@@ -99,9 +104,11 @@
                         class="form-input" 
                         id="signupEmail" 
                         placeholder="Enter your email"
+                        aria-describedby="signupEmailError"
+                        aria-required="true"
                         required
                     >
-                    <div class="form-error">Please enter a valid email</div>
+                    <div class="form-error" id="signupEmailError" role="alert">Please enter a valid email</div>
                 </div>
 
                 <div class="form-group">
@@ -112,17 +119,19 @@
                             class="form-input" 
                             id="signupPassword" 
                             placeholder="Create a password (min. 6 characters)"
+                            aria-describedby="signupPasswordError passwordStrengthText"
+                            aria-required="true"
                             required
                         >
-                        <button type="button" class="password-toggle" id="toggleSignupPassword">
+                        <button type="button" class="password-toggle" id="toggleSignupPassword" aria-label="Toggle password visibility">
                             👁️
                         </button>
                     </div>
-                    <div class="password-strength">
+                    <div class="password-strength" role="progressbar" aria-label="Password strength">
                         <div class="password-strength-bar" id="passwordStrengthBar"></div>
                     </div>
-                    <div class="password-strength-text" id="passwordStrengthText"></div>
-                    <div class="form-error">Password must be at least 6 characters</div>
+                    <div class="password-strength-text" id="passwordStrengthText" aria-live="polite"></div>
+                    <div class="form-error" id="signupPasswordError" role="alert">Password must be at least 6 characters</div>
                 </div>
 
                 <div class="form-group">
@@ -132,6 +141,8 @@
                         class="form-input" 
                         id="signupPasswordConfirm" 
                         placeholder="Confirm your password"
+                        aria-describedby="signupPasswordConfirmError"
+                        aria-required="true"
                         required
                     >
                     <div class="form-error">Passwords do not match</div>
