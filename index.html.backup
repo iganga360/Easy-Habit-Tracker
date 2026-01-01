@@ -5,21 +5,690 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>📊 Easy Habit Tracker</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#x1F4CA;</text></svg>">
-    <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/animations.css">
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --primary-dark: #45a049;
+            --secondary-color: #2196F3;
+            --warning-color: #FF9800;
+            --danger-color: #f44336;
+            --success-color: #4CAF50;
+            --text-primary: #333;
+            --text-secondary: #666;
+            --bg-primary: #f5f7fa;
+            --bg-card: #ffffff;
+            --border-color: #e0e0e0;
+            --shadow: 0 2px 10px rgba(0,0,0,0.1);
+            --shadow-hover: 0 4px 20px rgba(0,0,0,0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .current-date {
+            font-size: 1.2rem;
+            margin-top: 15px;
+            background: rgba(255,255,255,0.2);
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 25px;
+        }
+
+        /* Navigation Tabs */
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            background: var(--bg-card);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: var(--shadow);
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            border: none;
+            background: var(--bg-primary);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            color: var(--text-primary);
+        }
+
+        .tab-btn:hover {
+            background: #e0e0e0;
+        }
+
+        .tab-btn.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Card Styles */
+        .card {
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .card h2 {
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Progress Overview Section */
+        .progress-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .progress-card {
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .progress-card h3 {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .progress-card .value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .progress-card .label {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-top: 5px;
+        }
+
+        /* Progress Bar */
+        .progress-bar-container {
+            margin: 15px 0;
+        }
+
+        .progress-bar {
+            background: #e0e0e0;
+            border-radius: 10px;
+            height: 20px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Habit List */
+        .habit-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .habit-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: var(--bg-primary);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .habit-item:hover {
+            background: #e8e8e8;
+        }
+
+        .habit-item.completed {
+            background: #e8f5e9;
+        }
+
+        .habit-checkbox {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            accent-color: var(--primary-color);
+        }
+
+        .habit-name {
+            flex: 1;
+            font-weight: 500;
+        }
+
+        .habit-item.completed .habit-name {
+            text-decoration: line-through;
+            color: var(--text-secondary);
+        }
+
+        .habit-category {
+            font-size: 0.8rem;
+            padding: 4px 10px;
+            border-radius: 15px;
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .habit-streak {
+            font-size: 0.9rem;
+            color: var(--warning-color);
+            font-weight: bold;
+        }
+
+        .habit-delete {
+            background: none;
+            border: none;
+            color: var(--danger-color);
+            cursor: pointer;
+            font-size: 1.2rem;
+            opacity: 0.6;
+            transition: opacity 0.3s ease;
+        }
+
+        .habit-delete:hover {
+            opacity: 1;
+        }
+
+        /* Add Habit Form */
+        .add-habit-form {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .add-habit-form input,
+        .add-habit-form select {
+            padding: 12px 15px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .add-habit-form input:focus,
+        .add-habit-form select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .add-habit-form button {
+            padding: 12px 24px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+
+        .add-habit-form button:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Calendar Grid */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            margin-top: 15px;
+        }
+
+        .calendar-header {
+            text-align: center;
+            font-weight: bold;
+            padding: 10px;
+            background: var(--secondary-color);
+            color: white;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            background: var(--bg-primary);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .calendar-day:hover {
+            background: #e0e0e0;
+        }
+
+        .calendar-day.today {
+            border: 2px solid var(--primary-color);
+            font-weight: bold;
+        }
+
+        .calendar-day.completed {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .calendar-day.partial {
+            background: var(--warning-color);
+            color: white;
+        }
+
+        .calendar-day.other-month {
+            opacity: 0.3;
+        }
+
+        .calendar-day .date-num {
+            font-weight: bold;
+        }
+
+        .calendar-day .completion-rate {
+            font-size: 0.7rem;
+        }
+
+        /* Wellness Section */
+        .wellness-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .wellness-card {
+            background: var(--bg-primary);
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .wellness-card h3 {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .wellness-input {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .wellness-input input {
+            padding: 10px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            width: 80px;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        .wellness-input input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .mood-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .mood-btn {
+            font-size: 2rem;
+            padding: 10px;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            background: var(--bg-card);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .mood-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .mood-btn.selected {
+            border-color: var(--primary-color);
+            background: #e8f5e9;
+        }
+
+        /* Stats Section */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .chart-container {
+            height: 200px;
+            background: var(--bg-primary);
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            align-items: flex-end;
+            gap: 5px;
+        }
+
+        .bar {
+            flex: 1;
+            background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+            border-radius: 5px 5px 0 0;
+            min-width: 20px;
+            transition: height 0.5s ease;
+            position: relative;
+        }
+
+        .bar::after {
+            content: attr(data-value);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.75rem;
+            white-space: nowrap;
+        }
+
+        .bar-label {
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+        }
+
+        /* Ranking List */
+        .ranking-list {
+            counter-reset: ranking;
+        }
+
+        .ranking-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px;
+            background: var(--bg-primary);
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .ranking-item::before {
+            counter-increment: ranking;
+            content: "#" counter(ranking);
+            font-weight: bold;
+            color: var(--primary-color);
+            min-width: 30px;
+        }
+
+        .ranking-item:first-child::before {
+            content: "🥇";
+        }
+
+        .ranking-item:nth-child(2)::before {
+            content: "🥈";
+        }
+
+        .ranking-item:nth-child(3)::before {
+            content: "🥉";
+        }
+
+        .ranking-name {
+            flex: 1;
+        }
+
+        .ranking-percent {
+            font-weight: bold;
+            color: var(--success-color);
+        }
+
+        /* Actions Section */
+        .actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #1976D2;
+        }
+
+        .btn-danger {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #d32f2f;
+        }
+
+        /* Settings Section */
+        .settings-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: var(--bg-primary);
+            border-radius: 10px;
+        }
+
+        .setting-label {
+            font-weight: 500;
+        }
+
+        /* Notifications */
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 10px;
+            color: white;
+            font-weight: 500;
+            animation: slideIn 0.3s ease;
+            z-index: 1000;
+        }
+
+        .notification.success {
+            background: var(--success-color);
+        }
+
+        .notification.error {
+            background: var(--danger-color);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+
+            .tabs {
+                justify-content: center;
+            }
+
+            .tab-btn {
+                padding: 10px 16px;
+                font-size: 0.9rem;
+            }
+
+            .add-habit-form {
+                flex-direction: column;
+            }
+
+            .add-habit-form input,
+            .add-habit-form select,
+            .add-habit-form button {
+                width: 100%;
+            }
+
+            .calendar-header {
+                font-size: 0.7rem;
+                padding: 5px;
+            }
+
+            .calendar-day {
+                font-size: 0.75rem;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .tabs, .add-habit-form, .actions, .btn {
+                display: none;
+            }
+
+            .card {
+                break-inside: avoid;
+            }
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-secondary);
+            margin-top: 40px;
+        }
+
+        footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-    <!-- Dark Mode Toggle & User Profile -->
-    <div style="position: fixed; top: 20px; right: 20px; z-index: 1000; display: flex; gap: 15px; align-items: center;">
-        <div id="userProfile" style="display: flex; align-items: center; gap: 10px; background: var(--bg-card); padding: 8px 15px; border-radius: 25px; box-shadow: var(--shadow); cursor: pointer;">
-            <div id="userAvatar" style="width: 35px; height: 35px; border-radius: 50%; background: var(--primary-color); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1.1rem;"></div>
-            <span id="userName" style="font-weight: 500; color: var(--text-primary);"></span>
-        </div>
-        <button id="darkModeToggle" class="btn btn-secondary btn-ripple" style="padding: 10px 20px;" title="Toggle Dark Mode">
-            <span id="darkModeIcon">🌙</span>
-        </button>
-    </div>
-
     <header>
         <h1>📊 Easy Habit Tracker</h1>
         <p>Build better habits, one day at a time</p>
@@ -27,16 +696,12 @@
     </header>
 
     <div class="container">
-        <!-- Quote of the Day -->
-        <div id="quoteContainer"></div>
-
         <!-- Navigation Tabs -->
         <div class="tabs">
             <button class="tab-btn active" data-tab="daily">📅 Daily Tracker</button>
             <button class="tab-btn" data-tab="calendar">📆 Calendar View</button>
             <button class="tab-btn" data-tab="wellness">💚 Wellness</button>
             <button class="tab-btn" data-tab="stats">📈 Statistics</button>
-            <button class="tab-btn" data-tab="profile">👤 Profile</button>
             <button class="tab-btn" data-tab="settings">⚙️ Settings</button>
         </div>
 
@@ -231,48 +896,6 @@
                         <div class="value" id="daysTracked">0</div>
                         <div class="label">total days</div>
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Profile Tab -->
-        <div class="tab-content" id="profile">
-            <div class="card">
-                <h2>👤 My Profile</h2>
-                <div style="display: flex; flex-direction: column; align-items: center; gap: 20px; padding: 20px;">
-                    <div id="profileAvatar" style="width: 100px; height: 100px; border-radius: 50%; background: var(--primary-color); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 3rem; box-shadow: var(--shadow);"></div>
-                    
-                    <div style="width: 100%; max-width: 500px;">
-                        <div class="form-group" style="margin-bottom: 20px;">
-                            <label class="form-label" style="display: block; margin-bottom: 8px; font-weight: 500;">Username</label>
-                            <input type="text" id="profileUsername" class="form-input" style="width: 100%; padding: 12px; border: 2px solid var(--border-color); border-radius: 8px; font-size: 1rem;" placeholder="Enter your username">
-                        </div>
-                        
-                        <div class="form-group" style="margin-bottom: 20px;">
-                            <label class="form-label" style="display: block; margin-bottom: 8px; font-weight: 500;">Email</label>
-                            <input type="email" id="profileEmail" class="form-input" style="width: 100%; padding: 12px; border: 2px solid var(--border-color); border-radius: 8px; font-size: 1rem;" placeholder="Enter your email" disabled>
-                        </div>
-                        
-                        <button class="btn btn-primary btn-ripple" id="updateProfileBtn" style="width: 100%;">
-                            💾 Update Profile
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card">
-                <h2>🏆 Achievements</h2>
-                <div id="achievementsContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;">
-                    <!-- Achievements will be dynamically added here -->
-                </div>
-            </div>
-
-            <div class="card">
-                <h2>🔐 Account Actions</h2>
-                <div class="actions">
-                    <button class="btn btn-danger btn-ripple" id="logoutBtn">
-                        🚪 Logout
-                    </button>
                 </div>
             </div>
         </div>
@@ -997,123 +1620,6 @@
 
         // Initialize the app
         const tracker = new HabitTracker();
-    </script>
-
-    <!-- External JavaScript -->
-    <script src="js/auth.js"></script>
-    <script src="js/quotes.js"></script>
-    <script src="js/animations.js"></script>
-    
-    <script>
-        // Check authentication
-        if (!auth.isLoggedIn()) {
-            window.location.href = 'login.html';
-        }
-
-        // Display user info
-        const currentUser = auth.getCurrentUser();
-        if (currentUser) {
-            document.getElementById('userName').textContent = currentUser.username;
-            document.getElementById('userAvatar').textContent = currentUser.avatar.initial;
-            document.getElementById('userAvatar').style.background = currentUser.avatar.color;
-            
-            // Profile page
-            document.getElementById('profileAvatar').textContent = currentUser.avatar.initial;
-            document.getElementById('profileAvatar').style.background = currentUser.avatar.color;
-            document.getElementById('profileUsername').value = currentUser.username;
-            document.getElementById('profileEmail').value = currentUser.email;
-        }
-
-        // Display quote of the day
-        displayQuote('quoteContainer');
-
-        // Dark mode toggle
-        const darkModeToggle = document.getElementById('darkModeToggle');
-        const darkModeIcon = document.getElementById('darkModeIcon');
-        
-        // Check saved dark mode preference
-        const isDarkMode = localStorage.getItem('habitTrackerDarkMode') === 'true';
-        if (isDarkMode) {
-            document.body.classList.add('dark-mode');
-            darkModeIcon.textContent = '☀️';
-        }
-
-        darkModeToggle.addEventListener('click', () => {
-            document.body.classList.toggle('dark-mode');
-            const isDark = document.body.classList.contains('dark-mode');
-            darkModeIcon.textContent = isDark ? '☀️' : '🌙';
-            localStorage.setItem('habitTrackerDarkMode', isDark.toString());
-            
-            showToast(isDark ? 'Dark mode enabled' : 'Light mode enabled', 'success', 2000);
-        });
-
-        // Profile update
-        document.getElementById('updateProfileBtn').addEventListener('click', () => {
-            const newUsername = document.getElementById('profileUsername').value.trim();
-            
-            if (newUsername && newUsername !== currentUser.username) {
-                try {
-                    const updatedUser = auth.updateProfile({ username: newUsername });
-                    document.getElementById('userName').textContent = updatedUser.username;
-                    showToast('Profile updated successfully!', 'success');
-                } catch (error) {
-                    showToast(error.message, 'error');
-                }
-            }
-        });
-
-        // Logout
-        document.getElementById('logoutBtn').addEventListener('click', () => {
-            if (confirm('Are you sure you want to logout?')) {
-                auth.logout();
-            }
-        });
-
-        // User profile click - go to profile tab
-        document.getElementById('userProfile').addEventListener('click', () => {
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            document.querySelector('[data-tab="profile"]').classList.add('active');
-            document.getElementById('profile').classList.add('active');
-        });
-
-        // Display achievements
-        function displayAchievements() {
-            const achievements = [
-                { icon: '🔥', name: 'First Streak', desc: 'Complete a 3-day streak', unlocked: tracker.getCurrentStreak() >= 3 },
-                { icon: '💪', name: 'Consistent', desc: 'Complete a 7-day streak', unlocked: tracker.getCurrentStreak() >= 7 },
-                { icon: '🏆', name: 'Champion', desc: 'Complete a 30-day streak', unlocked: tracker.getCurrentStreak() >= 30 },
-                { icon: '✅', name: 'Habit Builder', desc: 'Create 10 habits', unlocked: tracker.habits.length >= 10 },
-                { icon: '📈', name: 'Progress Master', desc: '100% daily completion', unlocked: tracker.getCompletionRate() === 100 },
-                { icon: '🌟', name: 'Dedicated', desc: '500 total completions', unlocked: tracker.stats.totalCompletions >= 500 }
-            ];
-
-            const container = document.getElementById('achievementsContainer');
-            container.innerHTML = achievements.map(achievement => `
-                <div class="card hover-lift" style="padding: 20px; text-align: center; ${achievement.unlocked ? '' : 'opacity: 0.5; filter: grayscale(100%);'}">
-                    <div style="font-size: 3rem; margin-bottom: 10px;">${achievement.icon}</div>
-                    <div style="font-weight: 600; margin-bottom: 5px; color: var(--text-primary);">${achievement.name}</div>
-                    <div style="font-size: 0.85rem; color: var(--text-secondary);">${achievement.desc}</div>
-                    ${achievement.unlocked ? '<div style="margin-top: 10px; color: var(--success-color); font-weight: 600;">✓ Unlocked</div>' : '<div style="margin-top: 10px; color: var(--text-secondary); font-size: 0.85rem;">🔒 Locked</div>'}
-                </div>
-            `).join('');
-        }
-
-        // Call displayAchievements when switching to profile tab
-        const profileTab = document.querySelector('[data-tab="profile"]');
-        if (profileTab) {
-            profileTab.addEventListener('click', () => {
-                setTimeout(displayAchievements, 100);
-            });
-        }
-
-        // Celebrate streaks
-        const currentStreak = tracker.getCurrentStreak();
-        if (currentStreak > 0 && currentStreak % 7 === 0 && tracker.getCompletionRate() === 100) {
-            setTimeout(() => {
-                celebrateStreak(currentStreak);
-            }, 1000);
-        }
     </script>
 </body>
 </html>
