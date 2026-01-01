@@ -173,15 +173,6 @@ Each habit is color-coded for easy visual scanning:
 
 ---
 
-## 📞 Support & Contact
-
-- **Website**: [serenatas.store](https://serenatas.store)
-- **Email**: support@serenatas.store
-- **Live Chat**: Available 24/7 on our website
-- **Response Time**: Usually within 24 hours
-
----
-
 ## 📈 About the Creator
 
 This tracker was created by the team behind multiple **best-selling Etsy spreadsheet shops** with:
