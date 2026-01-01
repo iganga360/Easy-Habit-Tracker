@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>📊 Easy Habit Tracker</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>��</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#x1F4CA;</text></svg>">
     <style>
         :root {
             --primary-color: #4CAF50;
@@ -977,22 +977,31 @@
             }
 
             loadData() {
-                const savedData = localStorage.getItem('habitTrackerData');
-                if (savedData) {
-                    const parsed = JSON.parse(savedData);
-                    this.habits = parsed.habits || [];
-                    this.completions = parsed.completions || {};
-                    this.wellness = parsed.wellness || {};
-                    this.settings = parsed.settings || { sleepGoal: 8, waterGoal: 8 };
-                    this.stats = parsed.stats || { bestStreak: 0, totalCompletions: 0 };
-                } else {
-                    this.habits = [];
-                    this.completions = {};
-                    this.wellness = {};
-                    this.settings = { sleepGoal: 8, waterGoal: 8 };
-                    this.stats = { bestStreak: 0, totalCompletions: 0 };
-                    this.addDefaultHabits();
+                try {
+                    const savedData = localStorage.getItem('habitTrackerData');
+                    if (savedData) {
+                        const parsed = JSON.parse(savedData);
+                        this.habits = parsed.habits || [];
+                        this.completions = parsed.completions || {};
+                        this.wellness = parsed.wellness || {};
+                        this.settings = parsed.settings || { sleepGoal: 8, waterGoal: 8 };
+                        this.stats = parsed.stats || { bestStreak: 0, totalCompletions: 0 };
+                    } else {
+                        this.initDefaults();
+                    }
+                } catch (e) {
+                    console.warn('Could not load data from localStorage:', e.message);
+                    this.initDefaults();
                 }
+            }
+
+            initDefaults() {
+                this.habits = [];
+                this.completions = {};
+                this.wellness = {};
+                this.settings = { sleepGoal: 8, waterGoal: 8 };
+                this.stats = { bestStreak: 0, totalCompletions: 0 };
+                this.addDefaultHabits();
             }
 
             addDefaultHabits() {
@@ -1011,19 +1020,24 @@
             }
 
             saveData() {
-                const data = {
-                    habits: this.habits,
-                    completions: this.completions,
-                    wellness: this.wellness,
-                    settings: this.settings,
-                    stats: this.stats
-                };
-                localStorage.setItem('habitTrackerData', JSON.stringify(data));
+                try {
+                    const data = {
+                        habits: this.habits,
+                        completions: this.completions,
+                        wellness: this.wellness,
+                        settings: this.settings,
+                        stats: this.stats
+                    };
+                    localStorage.setItem('habitTrackerData', JSON.stringify(data));
+                } catch (e) {
+                    console.warn('Could not save data to localStorage:', e.message);
+                    showNotification('Could not save data. Storage may be full or disabled.', 'error');
+                }
             }
 
             addHabit(name, category, save = true) {
                 const habit = {
-                    id: Date.now() + Math.random(),
+                    id: typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
                     name,
                     category,
                     createdAt: getDateKey()
@@ -1111,8 +1125,9 @@
             getCurrentStreak() {
                 let streak = 0;
                 const today = new Date();
+                const maxDays = 90; // Limit iteration for performance
 
-                for (let i = 0; i < 365; i++) {
+                for (let i = 0; i < maxDays; i++) {
                     const date = new Date(today);
                     date.setDate(date.getDate() - i);
                     const dateKey = getDateKey(date);
@@ -1218,7 +1233,10 @@
                 reader.onload = (e) => {
                     try {
                         const data = JSON.parse(e.target.result);
-                        this.habits = data.habits || [];
+                        if (!data || typeof data !== 'object') {
+                            throw new Error('Invalid data structure');
+                        }
+                        this.habits = Array.isArray(data.habits) ? data.habits : [];
                         this.completions = data.completions || {};
                         this.wellness = data.wellness || {};
                         this.settings = data.settings || { sleepGoal: 8, waterGoal: 8 };
@@ -1227,8 +1245,12 @@
                         this.renderAll();
                         showNotification('Data imported successfully!', 'success');
                     } catch (err) {
-                        showNotification('Error importing data. Please check the file format.', 'error');
+                        console.error('Import error:', err);
+                        showNotification('Error importing data: ' + (err.message || 'Invalid JSON format. Please ensure the file is a valid habit tracker backup.'), 'error');
                     }
+                };
+                reader.onerror = () => {
+                    showNotification('Error reading file. Please try again.', 'error');
                 };
                 reader.readAsText(file);
             }
